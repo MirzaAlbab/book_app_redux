@@ -1,14 +1,15 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import {NavigationContainer} from '@react-navigation/native'
-import MainRoute from './src/routes/MainRoute'
+import React from 'react';
+import {Provider} from 'react-redux';
+import {persistedStore, store} from './src/store';
+import Root from './src/routes';
+import {PersistGate} from 'redux-persist/integration/react';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <MainRoute />
-    </NavigationContainer>
-
-
-  )
+    <Provider store={store}>
+      <PersistGate persistor={persistedStore}>
+        <Root />
+      </PersistGate>
+    </Provider>
+  );
 }
