@@ -31,11 +31,22 @@ export default function Home({navigation}) {
   const {popularBook, recommendedBook} = useSelector(state => state.home);
   // const [sortedrecommended, setsortedrecommended] = useState([]);
   const {user} = useSelector(state => state.login);
+
   const dispatch = useDispatch();
   useEffect(() => {
     getListBook();
     exit();
+    // console.log('recomende', recommendedBook);
+
+    // sortrecom();
   }, [connection]);
+  // const sortrecom = () => {
+  //   const sorted = recommendedBook.sort(function (a, b) {
+  //     return b.average_rating - a.average_rating;
+  //   });
+  //   const sortdone = sorted.slice(0, 6);
+  //   setsortedrecommended(sortdone);
+  // };
 
   const getListBook = () => {
     internetChecker();
@@ -43,6 +54,7 @@ export default function Home({navigation}) {
   };
 
   const getBookDetails = id => {
+    internetChecker();
     dispatch(getDetailBook(id));
   };
 
@@ -101,100 +113,69 @@ export default function Home({navigation}) {
     </Modal>
   );
 
-  const sortedrecommended = recommendedBook.sort((a, b) => {
-    return b.rating - a.rating;
-  });
-  const recommended = sortedrecommended.slice(0, 6);
-
-  const RecommendedBooks = ({item}) => {
+  const PopularBooks = ({item}) => {
     return (
-      <View
-        style={{
-          marginTop: 18,
-          padding: 10,
-          alignItems: 'center',
-          marginVertical: 15,
-          marginLeft: 5,
-          maxWidth: ms(120),
-          marginHorizontal: 5,
-          backgroundColor: '#23324b',
-          borderRadius: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            getBookDetails(item.id);
-          }}>
-          <Image
-            style={{width: ms(100), height: ms(100), borderRadius: 10}}
-            source={{uri: `${item.cover_image}`}}
-          />
-        </TouchableOpacity>
-        <Monserrat type="Bold" color="white">
-          {item.title}
-        </Monserrat>
+      <View>
+        {loading ? (
+          <Loading />
+        ) : (
+          <TouchableOpacity
+            style={{
+              width: Dimensions.get('window').width / 2 - 25,
+              height: 350,
+              alignItems: 'center',
+              backgroundColor: '#23324b',
+              marginVertical: 5,
+              marginHorizontal: 5,
+              borderRadius: 10,
+              padding: 10,
+            }}
+            onPress={() => {
+              getBookDetails(item.id);
+            }}>
+            <Image
+              style={{
+                width: ms(150),
+                height: ms(150),
+                borderRadius: 10,
+                marginRight: 15,
+                marginLeft: 15,
+              }}
+              source={{uri: item.cover_image}}
+            />
+            <View
+              style={{
+                flex: 2.5,
+                paddingTop: 5,
+                paddingBottom: 5,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flex: 1}}>
+                <Monserrat type="Bold" color="white" size={15}>
+                  {item.title}
+                </Monserrat>
+                <Monserrat color="white">{item.author}</Monserrat>
+                <Monserrat color="white">{item.publisher}</Monserrat>
+
+                <Monserrat color="white" type="Bold" size={12} marginTop={5}>
+                  <FontAwesome name="star" color="yellow" size={15} />{' '}
+                  {item.average_rating}
+                </Monserrat>
+
+                <Monserrat color="orange" type="Bold" size={12} marginTop={5}>
+                  <IonIcons name="pricetag" color="white" size={15} />{' '}
+                  {Rupiah(item.price)}
+                </Monserrat>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
-  const PopularBooks = ({item}) => {
-    return (
-      <TouchableOpacity
-        style={{
-          width: Dimensions.get('window').width / 3 - 20,
-          height: 300,
-          alignItems: 'center',
-          backgroundColor: '#23324b',
-          marginVertical: 5,
-          marginHorizontal: 5,
-          borderRadius: 10,
-          padding: 10,
-        }}
-        onPress={() => {
-          getBookDetails(item.id);
-        }}>
-        <Image
-          style={{
-            flex: 1,
-            width: ms(100),
-            height: ms(300),
-
-            borderRadius: 10,
-            marginRight: 15,
-            marginLeft: 15,
-          }}
-          source={{uri: item.cover_image}}
-        />
-        <View
-          style={{
-            flex: 2.5,
-            paddingTop: 5,
-            paddingBottom: 5,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <View style={{flex: 1}}>
-            <Monserrat type="Bold" color="white" size={15}>
-              {item.title}
-            </Monserrat>
-            <Monserrat color="white">{item.author}</Monserrat>
-            <Monserrat color="white">{item.publisher}</Monserrat>
-
-            <Monserrat color="white" type="Bold" size={12} marginTop={5}>
-              <FontAwesome name="star" color="yellow" size={15} />{' '}
-              {item.average_rating}
-            </Monserrat>
-
-            <Monserrat color="orange" type="Bold" size={12} marginTop={5}>
-              <IonIcons name="pricetag" color="white" size={15} />{' '}
-              {Rupiah(item.price)}
-            </Monserrat>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderHome = () => {
-    return (
+  return (
+    <SafeAreaView>
       <View style={styles.container}>
         <Header name={user.user.name} />
 
@@ -205,13 +186,17 @@ export default function Home({navigation}) {
           }
           ListHeaderComponent={() => (
             <>
-              <Monserrat color="white" type="Bold" size={20}>
+              <Monserrat
+                color="white"
+                type="Bold"
+                size={20}
+                marginVertical={15}>
                 Recommended Books
               </Monserrat>
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={recommended}
+                data={recommendedBook}
                 keyExtractor={(item, index) => index.toString()}
                 ListEmptyComponent={() => (
                   <View
@@ -225,18 +210,22 @@ export default function Home({navigation}) {
                     </Monserrat>
                   </View>
                 )}
-                renderItem={RecommendedBooks}
+                renderItem={PopularBooks}
               />
             </>
           )}
           ListFooterComponent={() => (
             <>
-              <Monserrat color="white" type="Bold" size={20}>
+              <Monserrat
+                color="white"
+                type="Bold"
+                size={20}
+                marginVertical={15}>
                 Popular Books
               </Monserrat>
               <FlatList
                 data={popularBook}
-                numColumns={3}
+                numColumns={2}
                 style={{
                   width: Dimensions.get('window').width - 20,
                 }}
@@ -266,13 +255,6 @@ export default function Home({navigation}) {
           />
         )}
       </View>
-    );
-  };
-
-  return (
-    <SafeAreaView>
-      {loading ? <Loading /> : null}
-      {renderHome()}
     </SafeAreaView>
   );
 }
@@ -322,3 +304,33 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+// const RecommendedBooks = ({item}) => {
+//   return (
+//     <View
+//       style={{
+//         marginTop: 18,
+//         padding: 10,
+//         alignItems: 'center',
+//         marginVertical: 15,
+//         marginLeft: 5,
+//         maxWidth: ms(120),
+//         marginHorizontal: 5,
+//         backgroundColor: '#23324b',
+//         borderRadius: 10,
+//       }}>
+//       <TouchableOpacity
+//         onPress={() => {
+//           getBookDetails(item.id);
+//         }}>
+//         <Image
+//           style={{width: ms(100), height: ms(100), borderRadius: 10}}
+//           source={{uri: `${item.cover_image}`}}
+//         />
+//       </TouchableOpacity>
+//       <Monserrat type="Bold" color="white">
+//         {item.title}
+//       </Monserrat>
+//     </View>
+//   );
+// };

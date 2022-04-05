@@ -13,10 +13,16 @@ export const getAllBook = () => async dispatch => {
     const results = await axios.get(`${BaseUrlApi}books`, {
       validateStatus: status => status < 501,
     });
+    console.log(results.status);
 
     if (results.status <= 201) {
       dispatch(setBookPopular(results.data.results));
-      dispatch(setBookRecommended(results.data.results));
+      const sorted = results.data.results
+        .sort(function (a, b) {
+          return b.average_rating - a.average_rating;
+        })
+        .slice(0, 6);
+      dispatch(setBookRecommended(sorted));
     }
   } catch (error) {
     console.log(error);

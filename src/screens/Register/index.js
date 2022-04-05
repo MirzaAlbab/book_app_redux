@@ -19,6 +19,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import Loading from '../../components/Loading';
 
 export default function Register({navigation}) {
+  const [emailerror, setEmailerror] = useState(false);
+  const [passworderror, setPassworderror] = useState(true);
   const [dataRegister, setDataRegister] = useState({});
   const [hidePassword, setHidePassword] = useState(true);
   const {loading} = useSelector(state => state.global);
@@ -34,7 +36,25 @@ export default function Register({navigation}) {
     }
   };
   const handleChange = (key, value) => {
-    setDataRegister({...dataRegister, [key]: value});
+    const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (key === 'email') {
+      if (regEmail.test(value)) {
+        setDataRegister({...dataRegister, [key]: value});
+        setEmailerror(false);
+      } else {
+        setEmailerror(true);
+        setDataRegister({...dataRegister, [key]: ''});
+      }
+    } else if (key === 'password') {
+      if (regexPassword.test(value)) {
+        setDataRegister({...dataRegister, [key]: value});
+        setPassworderror(false);
+      } else {
+        setDataRegister({...dataRegister, [key]: ''});
+        setPassworderror(true);
+      }
+    }
   };
 
   return (
@@ -58,6 +78,12 @@ export default function Register({navigation}) {
           placeholderTextColor="#ffffff"
           autoCapitalize="none"
         />
+        {emailerror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-220}>
+            Email tidak valid
+          </Monserrat>
+        ) : null}
+
         <View style={{position: 'relative'}}>
           <TextInput
             secureTextEntry={hidePassword}
@@ -76,6 +102,12 @@ export default function Register({navigation}) {
             )}
           </TouchableOpacity>
         </View>
+        {passworderror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-10}>
+            Password minimal 1 huruf, 1 angka dan 8 karakter
+          </Monserrat>
+        ) : null}
+
         <TextInput
           style={styles.textInput}
           placeholder="Name"

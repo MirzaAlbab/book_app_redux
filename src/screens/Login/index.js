@@ -17,6 +17,8 @@ import {setLogin} from './redux/action';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function Login({navigation}) {
+  const [emailerror, setEmailerror] = useState(false);
+  const [passworderror, setPassworderror] = useState(false);
   const [dataLogin, setDataLogin] = useState({});
   const [hidePassword, setHidePassword] = useState(true);
   const {loading} = useSelector(state => state.global);
@@ -25,7 +27,25 @@ export default function Login({navigation}) {
   const dispatch = useDispatch();
 
   const handleChange = (key, value) => {
-    setDataLogin({...dataLogin, [key]: value});
+    const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (key === 'email') {
+      if (regEmail.test(value)) {
+        setDataLogin({...dataLogin, [key]: value});
+        setEmailerror(false);
+      } else {
+        setEmailerror(true);
+        setDataLogin({...dataLogin, [key]: ''});
+      }
+    } else if (key === 'password') {
+      if (regexPassword.test(value)) {
+        setDataLogin({...dataLogin, [key]: value});
+        setPassworderror(false);
+      } else {
+        setDataLogin({...dataLogin, [key]: ''});
+        setPassworderror(true);
+      }
+    }
   };
 
   useEffect(() => {
@@ -62,6 +82,12 @@ export default function Login({navigation}) {
           placeholderTextColor="#ffffff"
           autoCapitalize="none"
         />
+        {emailerror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-220}>
+            Email tidak valid
+          </Monserrat>
+        ) : null}
+
         <View style={{position: 'relative'}}>
           <TextInput
             secureTextEntry={hidePassword}
@@ -80,6 +106,11 @@ export default function Login({navigation}) {
             )}
           </TouchableOpacity>
         </View>
+        {passworderror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-10}>
+            Password minimal 1 huruf, 1 angka, dan 8 karakter
+          </Monserrat>
+        ) : null}
 
         {loading ? (
           <Loading />
