@@ -15,6 +15,7 @@ import Loader from '../../components/Loading';
 import {Rupiah} from '../../helpers/Rupiah';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Loading from '../../components/Loading';
+import Monserrat from '../../components/Monserrat';
 
 export default function Detail({navigation, route}) {
   const {detailBook} = useSelector(state => state.home);
@@ -54,35 +55,30 @@ export default function Detail({navigation, route}) {
             />
 
             <View style={{marginTop: 15, marginBottom: 0}}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
+              <Monserrat
+                color="white"
+                size={18}
+                type="Bold"
+                paddingHorizontal={20}
+                textAlign="center">
                 {detailBook.title}
-              </Text>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 14,
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  marginTop: 5,
-                }}>
+              </Monserrat>
+              <Monserrat
+                color="white"
+                size={14}
+                type="Bold"
+                textAlign="center"
+                marginTop={5}>
                 {detailBook.author}
-              </Text>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 14,
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  marginTop: 5,
-                }}>
+              </Monserrat>
+              <Monserrat
+                color="white"
+                size={14}
+                type="Bold"
+                textAlign="center"
+                marginTop={5}>
                 {detailBook.publisher}
-              </Text>
+              </Monserrat>
             </View>
             <View style={styles.detailBox}>
               <View style={styles.detailBoxBackground}>
@@ -91,11 +87,22 @@ export default function Detail({navigation, route}) {
                     styles.boxSection,
                     {borderTopLeftRadius: 15, borderBottomLeftRadius: 15},
                   ]}>
-                  <Text style={styles.topText}>
+                  <Monserrat
+                    color="white"
+                    size={14}
+                    textAlign="center"
+                    type="Bold">
                     <FontAwesome name="star" color="yellow" size={15} />{' '}
                     {detailBook.average_rating}
-                  </Text>
-                  <Text style={styles.bottomText}>Rating</Text>
+                  </Monserrat>
+
+                  <Monserrat
+                    color="white"
+                    size={12}
+                    padding={5}
+                    textAlign="center">
+                    Rating
+                  </Monserrat>
                 </View>
                 <View
                   style={{
@@ -106,8 +113,20 @@ export default function Detail({navigation, route}) {
                   }}
                 />
                 <View style={styles.boxSection}>
-                  <Text style={styles.topText}>{Rupiah(detailBook.price)}</Text>
-                  <Text style={styles.bottomText}>Price</Text>
+                  <Monserrat
+                    color="white"
+                    size={14}
+                    textAlign="center"
+                    type="Bold">
+                    {Rupiah(detailBook.price)}
+                  </Monserrat>
+                  <Monserrat
+                    color="white"
+                    size={12}
+                    padding={5}
+                    textAlign="center">
+                    Price
+                  </Monserrat>
                 </View>
                 <View
                   style={{
@@ -122,8 +141,20 @@ export default function Detail({navigation, route}) {
                     styles.boxSection,
                     {borderTopRightRadius: 15, borderBottomRightRadius: 15},
                   ]}>
-                  <Text style={styles.topText}>{detailBook.total_sale}</Text>
-                  <Text style={styles.bottomText}>Total Sale</Text>
+                  <Monserrat
+                    color="white"
+                    size={14}
+                    textAlign="center"
+                    type="Bold">
+                    {detailBook.total_sale}
+                  </Monserrat>
+                  <Monserrat
+                    color="white"
+                    size={12}
+                    padding={5}
+                    textAlign="center">
+                    Total Sale
+                  </Monserrat>
                 </View>
               </View>
             </View>
@@ -131,25 +162,13 @@ export default function Detail({navigation, route}) {
         </View>
       </ImageBackground>
       <View style={styles.description}>
-        <Text
-          style={{
-            color: 'white',
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginBottom: 15,
-          }}>
+        <Monserrat color="white" size={18} type="Bold">
           Description
-        </Text>
+        </Monserrat>
         <ScrollView>
-          <Text
-            style={{
-              color: 'white',
-              opacity: 0.5,
-              fontSize: 18,
-              letterSpacing: 0.3,
-            }}>
+          <Monserrat color="white" size={14}>
             {detailBook.synopsis}
-          </Text>
+          </Monserrat>
         </ScrollView>
       </View>
       <View style={styles.footer}>
@@ -181,7 +200,9 @@ export default function Detail({navigation, route}) {
             alignItems: 'center',
           }}
           onPress={() => alert('Book is not available')}>
-          <Text style={{color: 'white', fontWeight: 'bold'}}>Buy</Text>
+          <Monserrat color="white" type="Bold" size={16}>
+            Buy
+          </Monserrat>
         </TouchableOpacity>
       </View>
     </View>
@@ -210,6 +231,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 25,
     marginBottom: 10,
+    marginTop: -10,
   },
   detailBoxBackground: {
     flex: 1,

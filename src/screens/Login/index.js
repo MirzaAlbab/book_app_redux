@@ -50,7 +50,7 @@ export default function Login({navigation}) {
           resizeMode="contain"
           source={logo}
         />
-        <Monserrat size={20} marginTop={-50}>
+        <Monserrat size={20} marginTop={-50} type="Bold">
           Book App
         </Monserrat>
         <Monserrat>Please login to continue using our app</Monserrat>
@@ -85,16 +85,23 @@ export default function Login({navigation}) {
           <Loading />
         ) : (
           <TouchableOpacity onPress={postLogin} style={styles.buttonStyle}>
-            <Text style={styles.textSignup}>Login</Text>
+            <Monserrat
+              type="Bold"
+              color="white"
+              size={16}
+              margin={10}
+              textAlign="center">
+              Login
+            </Monserrat>
           </TouchableOpacity>
         )}
-        <Monserrat color="#373737" marginTop={10}>
+        <Monserrat color="#171717" marginTop={10}>
           Don’t have an account?
         </Monserrat>
         <TouchableOpacity
           style={{marginVertical: 10}}
           onPress={() => navigation.navigate('Register')}>
-          <Monserrat type="Bold" color="#000" size={12} marginTop={-10}>
+          <Monserrat type="Bold" color="#000" size={14} marginTop={-10}>
             Register
           </Monserrat>
         </TouchableOpacity>

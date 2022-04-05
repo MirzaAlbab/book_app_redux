@@ -4,7 +4,6 @@ import {
   View,
   Image,
   FlatList,
-  ScrollView,
   TouchableOpacity,
   RefreshControl,
   BackHandler,
@@ -12,7 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Header from './Header';
 import {setRefresh, setConnection} from '../../reducer/globalAction';
@@ -24,13 +23,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Rupiah} from '../../helpers/Rupiah';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../../components/Loading';
-import {navigate} from '../../helpers/Navigasi';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home({navigation}) {
   const {loading, refreshing, connection} = useSelector(state => state.global);
   const {popularBook, recommendedBook} = useSelector(state => state.home);
+  // const [sortedrecommended, setsortedrecommended] = useState([]);
   const {user} = useSelector(state => state.login);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -80,13 +79,6 @@ export default function Home({navigation}) {
 
     return () => backHandler.remove();
   };
-  // const recommended = listBook
-  //   .filter(function (item) {
-  //     return item.vote_average >= 5;
-  //   })
-  //   .sort(function (a, b) {
-  //     return b.vote_average - a.vote_average;
-  //   });
 
   const Button = ({children, ...props}) => (
     <TouchableOpacity style={styles.button} {...props}>
@@ -108,10 +100,11 @@ export default function Home({navigation}) {
       </View>
     </Modal>
   );
-  const recommended = recommendedBook.sort(function (a, b) {
-    return b.average_rating - a.average_rating;
+
+  const sortedrecommended = recommendedBook.sort((a, b) => {
+    return b.rating - a.rating;
   });
-  const sortedrecommended = recommended.slice(0, 6);
+  const recommended = sortedrecommended.slice(0, 6);
 
   const RecommendedBooks = ({item}) => {
     return (
@@ -136,7 +129,9 @@ export default function Home({navigation}) {
             source={{uri: `${item.cover_image}`}}
           />
         </TouchableOpacity>
-        <Monserrat color="white">{item.title}</Monserrat>
+        <Monserrat type="Bold" color="white">
+          {item.title}
+        </Monserrat>
       </View>
     );
   };
@@ -160,8 +155,8 @@ export default function Home({navigation}) {
           style={{
             flex: 1,
             width: ms(100),
+            height: ms(300),
 
-            resizeMode: 'cover',
             borderRadius: 10,
             marginRight: 15,
             marginLeft: 15,
@@ -180,17 +175,15 @@ export default function Home({navigation}) {
             <Monserrat type="Bold" color="white" size={15}>
               {item.title}
             </Monserrat>
-            <Monserrat color="white" type="Bold">
-              {item.author}
-            </Monserrat>
+            <Monserrat color="white">{item.author}</Monserrat>
             <Monserrat color="white">{item.publisher}</Monserrat>
 
-            <Monserrat color="white" size={12} marginTop={5}>
+            <Monserrat color="white" type="Bold" size={12} marginTop={5}>
               <FontAwesome name="star" color="yellow" size={15} />{' '}
               {item.average_rating}
             </Monserrat>
 
-            <Monserrat color="white" size={12} marginTop={5}>
+            <Monserrat color="orange" type="Bold" size={12} marginTop={5}>
               <IonIcons name="pricetag" color="white" size={15} />{' '}
               {Rupiah(item.price)}
             </Monserrat>
@@ -212,13 +205,13 @@ export default function Home({navigation}) {
           }
           ListHeaderComponent={() => (
             <>
-              <Monserrat color="white" size={16}>
+              <Monserrat color="white" type="Bold" size={20}>
                 Recommended Books
               </Monserrat>
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={sortedrecommended}
+                data={recommended}
                 keyExtractor={(item, index) => index.toString()}
                 ListEmptyComponent={() => (
                   <View
@@ -238,7 +231,7 @@ export default function Home({navigation}) {
           )}
           ListFooterComponent={() => (
             <>
-              <Monserrat color="white" size={16}>
+              <Monserrat color="white" type="Bold" size={20}>
                 Popular Books
               </Monserrat>
               <FlatList
@@ -280,8 +273,6 @@ export default function Home({navigation}) {
     <SafeAreaView>
       {loading ? <Loading /> : null}
       {renderHome()}
-
-      {/* {connection ? renderHome() : navigation.navigate('NoConnect')} */}
     </SafeAreaView>
   );
 }
@@ -292,7 +283,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     alignItems: 'flex-start',
-    paddingBottom: 20,
+    paddingBottom: 150,
     backgroundColor: '#1C222B',
   },
   modal: {

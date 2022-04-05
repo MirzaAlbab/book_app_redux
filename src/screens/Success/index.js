@@ -28,35 +28,43 @@ export default function Success({navigation}) {
             alignSelf: 'center',
           }}
         />
-        <Text style={styles.successTextStyle}>
+
+        <Monserrat
+          color="white"
+          textAlign="center"
+          marginTop={20}
+          size={18}
+          padding={30}>
           We have sent a verification to your email. Please kindly check your
           inbox or spam to activate your account
-        </Text>
+        </Monserrat>
       </View>
 
       <TouchableOpacity
         style={styles.buttonStyle}
         activeOpacity={0.5}
         onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.buttonTextStyle}>Login Now</Text>
+        <Monserrat
+          color="white"
+          paddingVertical={10}
+          size={16}
+          type="Bold"
+          textAlign="center">
+          Login Now
+        </Monserrat>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
-    textAlign: 'center',
-  },
   buttonStyle: {
     backgroundColor: '#003456',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',
-    height: 40,
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
     marginLeft: 35,
@@ -64,11 +72,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 40,
   },
-  successTextStyle: {
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 18,
-    padding: 30,
-  },
+  successTextStyle: {},
 });

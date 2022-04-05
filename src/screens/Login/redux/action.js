@@ -45,3 +45,28 @@ export const setLogoutAction = () => dispatch => {
   dispatch(setToken());
   navigate('Login');
 };
+
+//
+export const setRegister = payload => async dispatch => {
+  try {
+    dispatch(setLoading(true));
+    const body = {
+      email: payload.email,
+      password: payload.password,
+      name: payload.name,
+    };
+
+    const res = await axios.post(`${BaseUrlApi}auth/register`, body, {
+      validateStatus: status => status < 501,
+    });
+    if (res.status <= 201) {
+      navigate('Success');
+    } else {
+      return alert('Registrasi gagal');
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
