@@ -16,3 +16,9 @@ export const setConnection = payload => {
     payload,
   };
 };
+export const setLogout = () => {
+  return {
+    type: 'SET_LOGOUT',
+    payload: '',
+  };
+};

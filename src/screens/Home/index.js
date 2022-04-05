@@ -31,6 +31,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export default function Home({navigation}) {
   const {loading, refreshing, connection} = useSelector(state => state.global);
   const {popularBook, recommendedBook} = useSelector(state => state.home);
+  const {user} = useSelector(state => state.login);
   const dispatch = useDispatch();
   useEffect(() => {
     getListBook();
@@ -135,9 +136,7 @@ export default function Home({navigation}) {
             source={{uri: `${item.cover_image}`}}
           />
         </TouchableOpacity>
-        <Monserrat textAlign="center" color="white">
-          {item.title}
-        </Monserrat>
+        <Monserrat color="white">{item.title}</Monserrat>
       </View>
     );
   };
@@ -204,7 +203,7 @@ export default function Home({navigation}) {
   const renderHome = () => {
     return (
       <View style={styles.container}>
-        <Header />
+        <Header name={user.user.name} />
 
         <FlatList
           style={{marginTop: 20}}
@@ -266,12 +265,6 @@ export default function Home({navigation}) {
           )}
         />
 
-        {/* <FlatList
-          data={popularBook}
-          keyExtractor={(item, index) => index}
-          renderItem={PopularBooks}
-          ListEmptyComponent={<Monserrat>No Data Found</Monserrat>}
-        /> */}
         {connection ? null : (
           <NoInternetModal
             show={!connection}
@@ -298,7 +291,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingBottom: 20,
     backgroundColor: '#1C222B',
   },
@@ -331,6 +324,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginTop: 10,
+    borderRadius: 10,
   },
   buttonText: {
     color: '#fff',

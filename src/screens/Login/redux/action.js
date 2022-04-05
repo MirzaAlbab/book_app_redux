@@ -40,3 +40,8 @@ export const setToken = payload => {
     payload,
   };
 };
+
+export const setLogoutAction = () => dispatch => {
+  dispatch(setToken());
+  navigate('Login');
+};
