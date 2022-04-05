@@ -9,6 +9,7 @@ import {
   RefreshControl,
   BackHandler,
   Alert,
+  Dimensions,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import React, {useEffect} from 'react';
@@ -24,6 +25,8 @@ import {Rupiah} from '../../helpers/Rupiah';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../../components/Loading';
 import {navigate} from '../../helpers/Navigasi';
+import Modal from 'react-native-modal';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home({navigation}) {
   const {loading, refreshing, connection} = useSelector(state => state.global);
@@ -32,7 +35,7 @@ export default function Home({navigation}) {
   useEffect(() => {
     getListBook();
     exit();
-  }, []);
+  }, [connection]);
 
   const getListBook = () => {
     internetChecker();
@@ -48,13 +51,11 @@ export default function Home({navigation}) {
     getListBook();
     dispatch(setRefresh(false));
   };
-  console.log('recomende', recommendedBook);
 
   const internetChecker = () => {
     NetInfo.fetch().then(state => {
       console.log('Connection type', state.type);
       console.log('Is connected?', state.isConnected);
-
       dispatch(setConnection(state.isConnected));
     });
   };
@@ -86,6 +87,26 @@ export default function Home({navigation}) {
   //     return b.vote_average - a.vote_average;
   //   });
 
+  const Button = ({children, ...props}) => (
+    <TouchableOpacity style={styles.button} {...props}>
+      <Text style={styles.buttonText}>{children}</Text>
+    </TouchableOpacity>
+  );
+
+  const NoInternetModal = ({show, onRetry, isRetrying}) => (
+    <Modal isVisible={show} style={styles.modal} animationInTiming={600}>
+      <View style={styles.modalContainer}>
+        <MaterialIcons name="wifi-off" size={50} color="black" />
+        <Text style={styles.modalTitle}>Connection Error</Text>
+        <Text style={styles.modalText}>
+          Oops! Looks like your device is not connected to the Internet.
+        </Text>
+        <Button onPress={onRetry} disabled={isRetrying}>
+          Try Again
+        </Button>
+      </View>
+    </Modal>
+  );
   const recommended = recommendedBook.sort(function (a, b) {
     return b.average_rating - a.average_rating;
   });
@@ -120,17 +141,18 @@ export default function Home({navigation}) {
       </View>
     );
   };
-
   const PopularBooks = ({item}) => {
     return (
       <TouchableOpacity
         style={{
-          flexDirection: 'row',
-          height: 150,
+          width: Dimensions.get('window').width / 3 - 20,
+          height: 300,
           alignItems: 'center',
           backgroundColor: '#23324b',
           marginVertical: 5,
+          marginHorizontal: 5,
           borderRadius: 10,
+          padding: 10,
         }}
         onPress={() => {
           getBookDetails(item.id);
@@ -138,8 +160,9 @@ export default function Home({navigation}) {
         <Image
           style={{
             flex: 1,
-            height: ms(100),
             width: ms(100),
+
+            resizeMode: 'cover',
             borderRadius: 10,
             marginRight: 15,
             marginLeft: 15,
@@ -155,7 +178,7 @@ export default function Home({navigation}) {
             justifyContent: 'space-between',
           }}>
           <View style={{flex: 1}}>
-            <Monserrat color="white" size={15}>
+            <Monserrat type="Bold" color="white" size={15}>
               {item.title}
             </Monserrat>
             <Monserrat color="white" type="Bold">
@@ -183,52 +206,134 @@ export default function Home({navigation}) {
       <View style={styles.container}>
         <Header />
 
-        <Monserrat color="white" size={16}>
-          Recommended Books
-        </Monserrat>
-
         <FlatList
-          showsHorizontalScrollIndicator={false}
-          data={sortedrecommended}
-          keyExtractor={(item, index) => index}
-          renderItem={RecommendedBooks}
-          ListEmptyComponent={<Monserrat>No Data Found</Monserrat>}
-          horizontal
+          style={{marginTop: 20}}
+          refreshControl={
+            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+          }
+          ListHeaderComponent={() => (
+            <>
+              <Monserrat color="white" size={16}>
+                Recommended Books
+              </Monserrat>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={sortedrecommended}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={() => (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Monserrat color="white" size={16}>
+                      No Data Available
+                    </Monserrat>
+                  </View>
+                )}
+                renderItem={RecommendedBooks}
+              />
+            </>
+          )}
+          ListFooterComponent={() => (
+            <>
+              <Monserrat color="white" size={16}>
+                Popular Books
+              </Monserrat>
+              <FlatList
+                data={popularBook}
+                numColumns={3}
+                style={{
+                  width: Dimensions.get('window').width - 20,
+                }}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                ListEmptyComponent={() => (
+                  <View
+                    style={{
+                      flex: 1,
+                    }}>
+                    <Monserrat color="white" size={16}>
+                      No Data Available
+                    </Monserrat>
+                  </View>
+                )}
+                renderItem={PopularBooks}
+              />
+            </>
+          )}
         />
 
-        <Monserrat color="white" size={16} marginTop={-10}>
-          Popular Books
-        </Monserrat>
-
-        <FlatList
+        {/* <FlatList
           data={popularBook}
           keyExtractor={(item, index) => index}
           renderItem={PopularBooks}
           ListEmptyComponent={<Monserrat>No Data Found</Monserrat>}
-        />
+        /> */}
+        {connection ? null : (
+          <NoInternetModal
+            show={!connection}
+            onRetry={getListBook}
+            isRetrying={loading}
+          />
+        )}
       </View>
     );
   };
 
   return (
     <SafeAreaView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-        }>
-        {connection ? renderHome() : navigation.navigate('NoConnect')}
-        {loading ? <Loading /> : null}
-      </ScrollView>
+      {loading ? <Loading /> : null}
+      {renderHome()}
+
+      {/* {connection ? renderHome() : navigation.navigate('NoConnect')} */}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 25,
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingBottom: 25,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    alignItems: 'center',
+    paddingBottom: 20,
     backgroundColor: '#1C222B',
+  },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalContainer: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 20,
+    paddingBottom: 40,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: '600',
+  },
+  modalText: {
+    fontSize: 18,
+    color: '#555',
+    marginTop: 14,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#000',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
   },
 });

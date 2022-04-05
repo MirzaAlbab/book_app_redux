@@ -7,8 +7,8 @@ export default function Header() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome back</Text>
-      <Text style={styles.textBold}>{user.user.name}</Text>
+      <Text style={styles.text}>Welcome back, </Text>
+      <Text style={styles.text}>{user.user.name}</Text>
     </View>
   );
 }
@@ -16,20 +16,12 @@ export default function Header() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
   },
   text: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  textBold: {
-    color: 'white',
-    fontSize: 22,
-    fontWeight: 'bold',
-    paddingTop: 5,
-    flex: 1,
-    maxWidth: 190,
   },
 });
