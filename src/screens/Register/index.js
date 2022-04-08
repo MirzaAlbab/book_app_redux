@@ -14,44 +14,49 @@ import {BaseUrlApi} from '../../helpers/api';
 import Monserrat from '../../components/Monserrat';
 import logo from '../../assets/images/logo.png';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {setRegister} from '../Login/redux/action';
+import {useDispatch, useSelector} from 'react-redux';
+import Loading from '../../components/Loading';
 
 export default function Register({navigation}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [emailerror, setEmailerror] = useState(false);
+  const [passworderror, setPassworderror] = useState(false);
+  const [dataRegister, setDataRegister] = useState({});
   const [hidePassword, setHidePassword] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const {loading} = useSelector(state => state.global);
+
+  const dispatch = useDispatch();
 
   const postRegister = async () => {
     // Cek inputan kosong
-    if (email.length < 1 || password.length < 1) {
-      alert('Email atau password tidak boleh kosong');
+    console.log(dataRegister);
+    if (!dataRegister.email || !dataRegister.password || !dataRegister.name) {
+      alert('Email atau password atau name tidak boleh kosong');
     } else {
-      setLoading(true);
-      try {
-        // const body = {
-        //   email: email,
-        //   password: password,
-        //   name: name,
-        // };
-
-        // const res = await axios.post(`${BaseUrlApi}auth/register`, body, {
-        //   validateStatus: status => status < 501,
-        // });
-        const res = {
-          status: 201,
-        };
-        console.log(res);
-        if (res.status <= 201) {
-          navigation.navigate('Success');
-        } else {
-          return alert('Registrasi gagal');
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
+      dispatch(setRegister(dataRegister));
+    }
+  };
+  const handleChange = (key, value) => {
+    const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (key === 'email') {
+      if (regEmail.test(value)) {
+        setDataRegister({...dataRegister, [key]: value});
+        setEmailerror(false);
+      } else {
+        setEmailerror(true);
+        setDataRegister({...dataRegister, [key]: ''});
       }
+    } else if (key === 'password') {
+      if (regexPassword.test(value)) {
+        setDataRegister({...dataRegister, [key]: value});
+        setPassworderror(false);
+      } else {
+        setDataRegister({...dataRegister, [key]: ''});
+        setPassworderror(true);
+      }
+    } else {
+      setDataRegister({...dataRegister, [key]: value});
     }
   };
 
@@ -64,7 +69,7 @@ export default function Register({navigation}) {
           source={logo}
         />
 
-        <Monserrat size={20} marginTop={-50}>
+        <Monserrat size={20} marginTop={-50} type="Bold">
           Book App
         </Monserrat>
         <Monserrat>Please register before using our app</Monserrat>
@@ -72,14 +77,20 @@ export default function Register({navigation}) {
         <TextInput
           style={styles.textInput}
           placeholder="Email"
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => handleChange('email', text)}
           placeholderTextColor="#ffffff"
           autoCapitalize="none"
         />
+        {emailerror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-220}>
+            Email tidak valid
+          </Monserrat>
+        ) : null}
+
         <View style={{position: 'relative'}}>
           <TextInput
             secureTextEntry={hidePassword}
-            onChangeText={text => setPassword(text)}
+            onChangeText={text => handleChange('password', text)}
             style={[styles.textInput]}
             placeholder="Password"
             placeholderTextColor="#ffffff"
@@ -94,28 +105,41 @@ export default function Register({navigation}) {
             )}
           </TouchableOpacity>
         </View>
+        {passworderror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-10}>
+            Password minimal 1 huruf, 1 angka dan 8 karakter
+          </Monserrat>
+        ) : null}
+
         <TextInput
           style={styles.textInput}
           placeholder="Name"
-          onChangeText={text => setName(text)}
+          onChangeText={text => handleChange('name', text)}
           placeholderTextColor="#ffffff"
           autoCapitalize="none"
         />
 
         <TouchableOpacity onPress={postRegister} style={styles.buttonStyle}>
           {loading ? (
-            <ActivityIndicator />
+            <Loading />
           ) : (
-            <Text style={styles.textSignup}>Register</Text>
+            <Monserrat
+              type="Bold"
+              color="white"
+              size={16}
+              margin={10}
+              textAlign="center">
+              Register
+            </Monserrat>
           )}
         </TouchableOpacity>
-        <Monserrat color="#373737" marginTop={10}>
+        <Monserrat color="#171717" marginTop={10}>
           Already have an account?
         </Monserrat>
         <TouchableOpacity
           style={{marginVertical: 10}}
           onPress={() => navigation.navigate('Login')}>
-          <Monserrat type="Bold" color="#000" size={12} marginTop={-10}>
+          <Monserrat type="Bold" color="#000" size={14} marginTop={-10}>
             Login
           </Monserrat>
         </TouchableOpacity>

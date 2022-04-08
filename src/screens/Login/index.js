@@ -17,6 +17,8 @@ import {setLogin} from './redux/action';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function Login({navigation}) {
+  const [emailerror, setEmailerror] = useState(false);
+  const [passworderror, setPassworderror] = useState(false);
   const [dataLogin, setDataLogin] = useState({});
   const [hidePassword, setHidePassword] = useState(true);
   const {loading} = useSelector(state => state.global);
@@ -25,7 +27,25 @@ export default function Login({navigation}) {
   const dispatch = useDispatch();
 
   const handleChange = (key, value) => {
-    setDataLogin({...dataLogin, [key]: value});
+    const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (key === 'email') {
+      if (regEmail.test(value)) {
+        setDataLogin({...dataLogin, [key]: value});
+        setEmailerror(false);
+      } else {
+        setEmailerror(true);
+        setDataLogin({...dataLogin, [key]: ''});
+      }
+    } else if (key === 'password') {
+      if (regexPassword.test(value)) {
+        setDataLogin({...dataLogin, [key]: value});
+        setPassworderror(false);
+      } else {
+        setDataLogin({...dataLogin, [key]: ''});
+        setPassworderror(true);
+      }
+    }
   };
 
   useEffect(() => {
@@ -50,7 +70,7 @@ export default function Login({navigation}) {
           resizeMode="contain"
           source={logo}
         />
-        <Monserrat size={20} marginTop={-50}>
+        <Monserrat size={20} marginTop={-50} type="Bold">
           Book App
         </Monserrat>
         <Monserrat>Please login to continue using our app</Monserrat>
@@ -62,6 +82,12 @@ export default function Login({navigation}) {
           placeholderTextColor="#ffffff"
           autoCapitalize="none"
         />
+        {emailerror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-220}>
+            Email tidak valid
+          </Monserrat>
+        ) : null}
+
         <View style={{position: 'relative'}}>
           <TextInput
             secureTextEntry={hidePassword}
@@ -80,21 +106,33 @@ export default function Login({navigation}) {
             )}
           </TouchableOpacity>
         </View>
+        {passworderror ? (
+          <Monserrat type="Bold" color="red" fontSize={12} marginLeft={-10}>
+            Password minimal 1 huruf, 1 angka, dan 8 karakter
+          </Monserrat>
+        ) : null}
 
         {loading ? (
           <Loading />
         ) : (
           <TouchableOpacity onPress={postLogin} style={styles.buttonStyle}>
-            <Text style={styles.textSignup}>Login</Text>
+            <Monserrat
+              type="Bold"
+              color="white"
+              size={16}
+              margin={10}
+              textAlign="center">
+              Login
+            </Monserrat>
           </TouchableOpacity>
         )}
-        <Monserrat color="#373737" marginTop={10}>
+        <Monserrat color="#171717" marginTop={10}>
           Don’t have an account?
         </Monserrat>
         <TouchableOpacity
           style={{marginVertical: 10}}
           onPress={() => navigation.navigate('Register')}>
-          <Monserrat type="Bold" color="#000" size={12} marginTop={-10}>
+          <Monserrat type="Bold" color="#000" size={14} marginTop={-10}>
             Register
           </Monserrat>
         </TouchableOpacity>

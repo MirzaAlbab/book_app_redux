@@ -9,6 +9,7 @@ export default HomeReducer = (state = initialState, action) => {
     case 'SET_BOOK_POPULAR':
       return {
         ...state,
+
         popularBook: action.payload,
       };
     case 'SET_BOOK_RECOMMENDED':

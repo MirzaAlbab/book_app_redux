@@ -1,7 +1,7 @@
 const initialState = {
   loading: false,
   refreshing: false,
-  connection: 'false',
+  connection: true,
 };
 
 export default (state = initialState, action) => {

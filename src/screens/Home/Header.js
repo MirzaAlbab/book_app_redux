@@ -1,14 +1,15 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {useSelector} from 'react-redux';
+import Logout from '../../components/Logout';
+import Monserrat from '../../components/Monserrat';
 
-export default function Header() {
-  const {user} = useSelector(state => state.login);
-
+export default function Header(props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome back</Text>
-      <Text style={styles.textBold}>{user.user.name}</Text>
+      <Monserrat color="white" type="Bold" size={20}>
+        Welcome back, {props.name}
+      </Monserrat>
+      <Logout />
     </View>
   );
 }
@@ -16,20 +17,12 @@ export default function Header() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
   },
   text: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  textBold: {
-    color: 'white',
-    fontSize: 22,
-    fontWeight: 'bold',
-    paddingTop: 5,
-    flex: 1,
-    maxWidth: 190,
   },
 });
