@@ -23,30 +23,23 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Rupiah} from '../../helpers/Rupiah';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../../components/Loading';
+
+import {sortBook} from '../../helpers/Sortbook';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home({navigation}) {
   const {loading, refreshing, connection} = useSelector(state => state.global);
   const {popularBook, recommendedBook} = useSelector(state => state.home);
-  // const [sortedrecommended, setsortedrecommended] = useState([]);
+  const [recommended, setrecommended] = useState(recommendedBook);
   const {user} = useSelector(state => state.login);
 
   const dispatch = useDispatch();
   useEffect(() => {
     getListBook();
     exit();
-    // console.log('recomende', recommendedBook);
-
-    // sortrecom();
-  }, [connection]);
-  // const sortrecom = () => {
-  //   const sorted = recommendedBook.sort(function (a, b) {
-  //     return b.average_rating - a.average_rating;
-  //   });
-  //   const sortdone = sorted.slice(0, 6);
-  //   setsortedrecommended(sortdone);
-  // };
+    setrecommended(sortBook(recommendedBook, 6));
+  }, []);
 
   const getListBook = () => {
     internetChecker();
@@ -61,6 +54,7 @@ export default function Home({navigation}) {
   const onRefresh = () => {
     dispatch(setRefresh(true));
     getListBook();
+    setrecommended(sortBook(recommendedBook, 6));
     dispatch(setRefresh(false));
   };
 
@@ -92,12 +86,6 @@ export default function Home({navigation}) {
     return () => backHandler.remove();
   };
 
-  const Button = ({children, ...props}) => (
-    <TouchableOpacity style={styles.button} {...props}>
-      <Text style={styles.buttonText}>{children}</Text>
-    </TouchableOpacity>
-  );
-
   const NoInternetModal = ({show, onRetry, isRetrying}) => (
     <Modal isVisible={show} style={styles.modal} animationInTiming={600}>
       <View style={styles.modalContainer}>
@@ -112,73 +100,73 @@ export default function Home({navigation}) {
       </View>
     </Modal>
   );
+  const Button = ({children, ...props}) => (
+    <TouchableOpacity style={styles.button} {...props}>
+      <Text style={styles.buttonText}>{children}</Text>
+    </TouchableOpacity>
+  );
 
   const PopularBooks = ({item}) => {
     return (
-      <View>
-        {loading ? (
-          <Loading />
-        ) : (
-          <TouchableOpacity
-            style={{
-              width: Dimensions.get('window').width / 2 - 25,
-              height: 350,
-              alignItems: 'center',
-              backgroundColor: '#23324b',
-              marginVertical: 5,
-              marginHorizontal: 5,
-              borderRadius: 10,
-              padding: 10,
-            }}
-            onPress={() => {
-              getBookDetails(item.id);
-            }}>
-            <Image
-              style={{
-                width: ms(150),
-                height: ms(150),
-                borderRadius: 10,
-                marginRight: 15,
-                marginLeft: 15,
-              }}
-              source={{uri: item.cover_image}}
-            />
-            <View
-              style={{
-                flex: 2.5,
-                paddingTop: 5,
-                paddingBottom: 5,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <View style={{flex: 1}}>
-                <Monserrat type="Bold" color="white" size={15}>
-                  {item.title}
-                </Monserrat>
-                <Monserrat color="white">{item.author}</Monserrat>
-                <Monserrat color="white">{item.publisher}</Monserrat>
+      <TouchableOpacity
+        style={{
+          width: Dimensions.get('window').width / 2 - 25,
+          height: 350,
+          alignItems: 'center',
+          backgroundColor: '#23324b',
+          marginVertical: 5,
+          marginHorizontal: 5,
+          borderRadius: 10,
+          padding: 10,
+        }}
+        onPress={() => {
+          getBookDetails(item.id);
+        }}>
+        <Image
+          style={{
+            width: ms(150),
+            height: ms(150),
+            borderRadius: 10,
+            marginRight: 15,
+            marginLeft: 15,
+          }}
+          source={{uri: item.cover_image}}
+        />
+        <View
+          style={{
+            flex: 2.5,
+            paddingTop: 5,
+            paddingBottom: 5,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style={{flex: 1}}>
+            <Monserrat type="Bold" color="white" size={15}>
+              {item.title}
+            </Monserrat>
+            <Monserrat color="white">{item.author}</Monserrat>
+            <Monserrat color="white">{item.publisher}</Monserrat>
 
-                <Monserrat color="white" type="Bold" size={12} marginTop={5}>
-                  <FontAwesome name="star" color="yellow" size={15} />{' '}
-                  {item.average_rating}
-                </Monserrat>
+            <Monserrat color="white" type="Bold" size={12} marginTop={5}>
+              <FontAwesome name="star" color="yellow" size={15} />{' '}
+              {item.average_rating}
+            </Monserrat>
 
-                <Monserrat color="orange" type="Bold" size={12} marginTop={5}>
-                  <IonIcons name="pricetag" color="white" size={15} />{' '}
-                  {Rupiah(item.price)}
-                </Monserrat>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      </View>
+            <Monserrat color="orange" type="Bold" size={12} marginTop={5}>
+              <IonIcons name="pricetag" color="white" size={15} />{' '}
+              {Rupiah(item.price)}
+            </Monserrat>
+          </View>
+        </View>
+      </TouchableOpacity>
     );
   };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <Header name={user.user.name} />
-
+        {loading ? <Loading /> : null}
         <FlatList
           style={{marginTop: 20}}
           refreshControl={
@@ -186,32 +174,34 @@ export default function Home({navigation}) {
           }
           ListHeaderComponent={() => (
             <>
-              <Monserrat
-                color="white"
-                type="Bold"
-                size={20}
-                marginVertical={15}>
-                Recommended Books
-              </Monserrat>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={recommendedBook}
-                keyExtractor={(item, index) => index.toString()}
-                ListEmptyComponent={() => (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Monserrat color="white" size={16}>
-                      No Data Available
-                    </Monserrat>
-                  </View>
-                )}
-                renderItem={PopularBooks}
-              />
+              <View>
+                <Monserrat
+                  color="white"
+                  type="Bold"
+                  size={20}
+                  marginVertical={15}>
+                  Recommended Books
+                </Monserrat>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={recommended}
+                  renderItem={PopularBooks}
+                  keyExtractor={(item, index) => index.toString()}
+                  ListEmptyComponent={() => (
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Monserrat color="white" size={16}>
+                        No Data Available
+                      </Monserrat>
+                    </View>
+                  )}
+                />
+              </View>
             </>
           )}
           ListFooterComponent={() => (
@@ -225,6 +215,7 @@ export default function Home({navigation}) {
               </Monserrat>
               <FlatList
                 data={popularBook}
+                renderItem={PopularBooks}
                 numColumns={2}
                 style={{
                   width: Dimensions.get('window').width - 20,
@@ -241,7 +232,6 @@ export default function Home({navigation}) {
                     </Monserrat>
                   </View>
                 )}
-                renderItem={PopularBooks}
               />
             </>
           )}
@@ -304,33 +294,3 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-
-// const RecommendedBooks = ({item}) => {
-//   return (
-//     <View
-//       style={{
-//         marginTop: 18,
-//         padding: 10,
-//         alignItems: 'center',
-//         marginVertical: 15,
-//         marginLeft: 5,
-//         maxWidth: ms(120),
-//         marginHorizontal: 5,
-//         backgroundColor: '#23324b',
-//         borderRadius: 10,
-//       }}>
-//       <TouchableOpacity
-//         onPress={() => {
-//           getBookDetails(item.id);
-//         }}>
-//         <Image
-//           style={{width: ms(100), height: ms(100), borderRadius: 10}}
-//           source={{uri: `${item.cover_image}`}}
-//         />
-//       </TouchableOpacity>
-//       <Monserrat type="Bold" color="white">
-//         {item.title}
-//       </Monserrat>
-//     </View>
-//   );
-// };

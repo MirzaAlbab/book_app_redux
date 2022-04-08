@@ -21,11 +21,6 @@ export default (state = initialState, action) => {
         ...state,
         connection: action.payload,
       };
-    case 'SET_LOGOUT':
-      return {
-        ...state,
-        token: action.payload,
-      };
 
     default:
       return state;

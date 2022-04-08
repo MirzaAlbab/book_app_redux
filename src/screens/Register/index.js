@@ -20,7 +20,7 @@ import Loading from '../../components/Loading';
 
 export default function Register({navigation}) {
   const [emailerror, setEmailerror] = useState(false);
-  const [passworderror, setPassworderror] = useState(true);
+  const [passworderror, setPassworderror] = useState(false);
   const [dataRegister, setDataRegister] = useState({});
   const [hidePassword, setHidePassword] = useState(true);
   const {loading} = useSelector(state => state.global);
@@ -29,6 +29,7 @@ export default function Register({navigation}) {
 
   const postRegister = async () => {
     // Cek inputan kosong
+    console.log(dataRegister);
     if (!dataRegister.email || !dataRegister.password || !dataRegister.name) {
       alert('Email atau password atau name tidak boleh kosong');
     } else {
@@ -54,6 +55,8 @@ export default function Register({navigation}) {
         setDataRegister({...dataRegister, [key]: ''});
         setPassworderror(true);
       }
+    } else {
+      setDataRegister({...dataRegister, [key]: value});
     }
   };
 

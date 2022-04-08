@@ -29,7 +29,7 @@ export default function Logout() {
 }
 const styles = StyleSheet.create({
   container: {
-    marginLeft: ms(40),
+    marginLeft: ms(10),
   },
   text: {
     color: 'white',

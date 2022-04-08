@@ -17,12 +17,7 @@ export const getAllBook = () => async dispatch => {
 
     if (results.status <= 201) {
       dispatch(setBookPopular(results.data.results));
-      const sorted = results.data.results
-        .sort(function (a, b) {
-          return b.average_rating - a.average_rating;
-        })
-        .slice(0, 6);
-      dispatch(setBookRecommended(sorted));
+      dispatch(setBookRecommended(results.data.results));
     }
   } catch (error) {
     console.log(error);
