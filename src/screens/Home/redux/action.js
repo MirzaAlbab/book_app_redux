@@ -13,14 +13,14 @@ export const getAllBook = () => async dispatch => {
     const results = await axios.get(`${BaseUrlApi}books`, {
       validateStatus: status => status < 501,
     });
-    console.log(results.status);
+    // console.log(results.status);
 
     if (results.status <= 201) {
       dispatch(setBookPopular(results.data.results));
       dispatch(setBookRecommended(results.data.results));
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     dispatch(setLoading(false));
   }
@@ -50,7 +50,7 @@ export const getDetailBook = id => async dispatch => {
       navigate('Detail');
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     dispatch(setLoading(false));
   }

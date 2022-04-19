@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity, StyleSheet, Alert} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import React from 'react';
 import {setLogoutAction} from '../screens/Login/redux/action';
 import {useDispatch} from 'react-redux';

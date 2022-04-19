@@ -145,6 +145,12 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    packagingOptions {
+      pickFirst 'lib/x86/libc++_shared.so'
+      pickFirst 'lib/x86_64/libc++_shared.so'
+      pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+      pickFirst 'lib/arm64-v8a/libc++_shared.so'
+  }
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -192,9 +198,9 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
-     implementation project(':react-native-splash-screen')
+    implementation project(':react-native-splash-screen')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-
+     
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
