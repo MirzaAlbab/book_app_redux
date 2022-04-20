@@ -28,7 +28,7 @@ export default function Login({navigation}) {
   const handleChange = (key, value) => {
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     const regEmail =
-      /^(([^<>()[]\.,;:\s@"]+(.[^<>()[]\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     if (key === 'email') {
       if (regEmail.test(value)) {
         setDataLogin({...dataLogin, [key]: value});
@@ -50,7 +50,7 @@ export default function Login({navigation}) {
 
   useEffect(() => {
     if (token) {
-      navigation.navigate('Home');
+      navigation.navigate('Media');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);

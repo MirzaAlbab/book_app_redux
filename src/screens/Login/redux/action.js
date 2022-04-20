@@ -17,7 +17,7 @@ export const setLogin = payload => async dispatch => {
     if (res.status <= 201) {
       dispatch(setUser(res.data));
       dispatch(setToken(res.data.tokens.access.token));
-      navigate('Home');
+      navigate('Media');
     } else {
       return Alert.alert('warning', 'Email atau Password salah');
     }

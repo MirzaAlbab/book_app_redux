@@ -162,46 +162,12 @@ export default function Home({navigation}) {
       </TouchableOpacity>
     );
   };
-  const [music, setMusic] = useState(null);
-  const playMusic = () => {
-    const audio = new Sound('music.mp3', Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-      // loaded successfully
-      console.log(
-        'duration in seconds: ' +
-          audio.getDuration() +
-          'number of channels: ' +
-          audio.getNumberOfChannels(),
-      );
-      setMusic(audio);
-      audio.play(() => {
-        console.log('finished playing');
-        audio.release();
-      });
-    });
-  };
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <Header name={user.user.name} />
         {loading ? <Loading /> : null}
-        <Button color="white" title="play" onPress={() => playMusic()} />
-        <Button
-          title="pause"
-          onPress={() => {
-            music.pause();
-          }}
-        />
-        <Button
-          title="stop"
-          onPress={() => {
-            music.stop();
-          }}
-        />
 
         <FlatList
           style={{marginTop: 20}}

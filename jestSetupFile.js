@@ -2,3 +2,6 @@ import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/asy
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 jest.mock('react-native-sound', () => ({default: jest.fn()}));
 jest.mock('@react-native-community/netinfo', () => ({default: jest.fn()}));
+jest.mock('react-native-share', () => ({
+  default: jest.fn(),
+}));
