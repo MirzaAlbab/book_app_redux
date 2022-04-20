@@ -1,11 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Audio from './components/Audio';
+import Monserrat from '../../components/Monserrat';
 
 export default function Media({navigation}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Media Handling</Text>
+      <Monserrat fontSize={20} color="white" type="Bold">
+        Media Handling
+      </Monserrat>
       <Audio navigation={navigation} />
     </View>
   );
@@ -14,12 +17,10 @@ export default function Media({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    backgroundColor: '#1C222B',
   },
 });
