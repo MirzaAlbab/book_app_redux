@@ -6,6 +6,7 @@ import Login from '../screens/Login';
 import Register from '../screens/Register';
 import Success from '../screens/Success';
 import Media from '../screens/Media';
+import PlayerScreen from 'react-native-sound-playerview';
 const Stack = createStackNavigator();
 
 export default function MainRoute() {
@@ -19,6 +20,7 @@ export default function MainRoute() {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Detail" component={Detail} />
       <Stack.Screen name="Media" component={Media} />
+      <Stack.Screen name="player" component={PlayerScreen} />
     </Stack.Navigator>
   );
 }

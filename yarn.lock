@@ -6769,6 +6769,13 @@ react-native-customized-box@^1.1.0:
   resolved "https://registry.yarnpkg.com/react-native-customized-box/-/react-native-customized-box-1.1.0.tgz#9fa49f69bcc7a0c5cf51fe0c179486e902a8653b"
   integrity sha512-LesilHxtQLWgvIKmyu+0flu2wZ3p2rZKjLo2Sd/GCA/wye9DIZPkVOYQjRMV8UJeSuB5mL2GjBcsBjfsdDlopQ==
 
+react-native-document-picker@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-8.1.0.tgz#e167a98b6fcdd1aee08597793029101d674eab83"
+  integrity sha512-FdaehvEoqkVkMTkIy09wpgHUHh9SskI1k8ug8Dwkwk7MJ+XxzrphAk/mXZtu5RkM1Iwxmd82QfwiQJxrZ2LSVg==
+  dependencies:
+    invariant "^2.2.4"
+
 react-native-gesture-handler@^2.1.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.3.2.tgz#65ce3b145bd96242c2200abbb9730c94bc73386c"
@@ -6827,6 +6834,11 @@ react-native-size-matters@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz#01bfd0d59454318f4e0b13fe9c1eb0523d70f2e0"
   integrity sha512-8/C0htHrFWeUm9N8JegmadovUfgTWkGBkDPZ1N3YkXtDWb+98Ya2gThiKcu445r8c7YhcrBfnHz/mYsXIusaOQ==
+
+react-native-sound-player@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/react-native-sound-player/-/react-native-sound-player-0.12.0.tgz#a10e9d7b340f9575b29a747b955c91f5e16b37b4"
+  integrity sha512-3z7hzhr9s64tEaRP8/q0MmdiCe/cwXy5TUeMM5RA89COG8dHqgFHDx2EGuG65c6BlP96oBnHvtswiVFWyF4O6Q==
 
 react-native-sound-playerview@^1.0.0:
   version "1.0.0"

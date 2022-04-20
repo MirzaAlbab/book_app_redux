@@ -1,52 +1,45 @@
-import {StyleSheet, Button, View} from 'react-native';
+import {StyleSheet, Text, Button, View} from 'react-native';
 import React, {useState} from 'react';
-import Sound from 'react-native-sound';
+import SoundPlayer from 'react-native-sound-player';
+import DocumentPicker from 'react-native-document-picker';
 
-export default function Audio() {
+export default function Audio({navigation}) {
   const [music, setMusic] = useState(null);
-  const playMusic = () => {
-    const audio = new Sound('music.mp3', Sound.MAIN_BUNDLE, error => {
-      if (error) {
-        console.log('failed to load the sound', error);
-        return;
-      }
-      // loaded successfully
-      console.log(
-        'duration in seconds: ' +
-          audio.getDuration() +
-          'number of channels: ' +
-          audio.getNumberOfChannels(),
-      );
-      setMusic(audio);
-      audio.play(() => {
-        console.log('finished playing');
-        audio.release();
-      });
-    });
+  const openStorage = async () => {
+    try {
+      const res = await DocumentPicker.pick();
+      setMusic(res[0]);
+    } catch (error) {
+      setMusic(old => old);
+    }
+    SoundPlayer.playUrl(music.uri);
   };
   return (
     <View>
-      <Button title="play" onPress={() => playMusic()} />
+      <Text style={styles.title}>Audio</Text>
+
       <Button
-        title="pause"
-        onPress={() => {
-          music.pause();
-        }}
+        style={styles.tombol}
+        title="play a music"
+        onPress={() => openStorage()}
       />
-      {/* <Button
-        title="resume"
-        onPress={() => {
-          music.resume();
-        }}
-      /> */}
-      <Button
-        title="stop"
-        onPress={() => {
-          music.stop();
-        }}
-      />
+
+      <Text style>{music ? music.name : 'no music'}</Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+  },
+  songtitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'red',
+  },
+  tombol: {
+    marginHorizontal: 20,
+    color: 'red',
+  },
+});
