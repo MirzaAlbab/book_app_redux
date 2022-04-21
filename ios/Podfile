@@ -22,6 +22,8 @@ target 'bookapp__redux' do
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
   target 'bookapp__reduxTests' do
     inherit! :complete
     # Pods for testing

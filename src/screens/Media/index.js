@@ -2,6 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Audio from './components/Audio';
 import Monserrat from '../../components/Monserrat';
+import Video from './components/Video';
 
 export default function Media({navigation}) {
   return (
@@ -9,7 +10,8 @@ export default function Media({navigation}) {
       <Monserrat fontSize={20} color="white" type="Bold">
         Media Handling
       </Monserrat>
-      <Audio navigation={navigation} />
+      <Audio />
+      <Video />
     </View>
   );
 }

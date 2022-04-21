@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+"
+    "url": "git+https://github.com/MirzaAlbab/book_app_redux.git"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.3",
@@ -45,6 +45,9 @@
     "react-native-sound-playerview": "^1.0.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^9.1.0",
+    "react-native-video": "^5.2.0",
+    "react-native-video-controls": "^2.8.1",
+    "react-native-video-player": "^0.12.0",
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
     "redux-logger": "^3.0.6",

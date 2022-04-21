@@ -8,7 +8,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 export default function Audio({navigation}) {
   const [music, setMusic] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     SoundPlayer.addEventListener('FinishedPlaying', () => {
