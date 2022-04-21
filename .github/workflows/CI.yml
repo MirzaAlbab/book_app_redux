@@ -15,7 +15,7 @@ jobs:
     #steps represent a sequence of task that will be executed as part of the job
     steps:
       # checks out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: action/checkout@v1
+      - uses: action/checkout@v2
       #node android java
       - uses: docker://circleci/android:api-29-node
 
