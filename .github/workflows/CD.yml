@@ -1,4 +1,4 @@
-name: Deploy to telegram
+name: CD to Process
 
 on:
   workflow_dispatch: # allow jobs manual run
