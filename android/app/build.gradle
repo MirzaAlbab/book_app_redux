@@ -134,8 +134,8 @@ android {
         applicationId "com.bookapp__redux"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "0.0.3"
+        versionCode 3
+        versionName "1.0.0"
     }
     splits {
         abi {
@@ -162,8 +162,8 @@ android {
         }
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
+        release {
+            signingConfig signingConfigs.release
             if (nativeArchitectures) {
                 ndk {
                     abiFilters nativeArchitectures.split(',')
