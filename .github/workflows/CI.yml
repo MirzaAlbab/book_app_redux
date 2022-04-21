@@ -3,9 +3,9 @@ name: deploy to telegram
 on:
   workflow_dispatch: # allow manual run of job
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   testing:
