@@ -60,8 +60,6 @@ export default function Home({navigation}) {
 
   const internetChecker = () => {
     NetInfo.fetch().then(state => {
-      console.log('Connection type', state.type);
-      console.log('Is connected?', state.isConnected);
       dispatch(setConnection(state.isConnected));
     });
   };

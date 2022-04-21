@@ -5,3 +5,5 @@ jest.mock('@react-native-community/netinfo', () => ({default: jest.fn()}));
 jest.mock('react-native-share', () => ({
   default: jest.fn(),
 }));
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+jest.mock('react-native-blob-util', () => ({default: jest.fn()}));
