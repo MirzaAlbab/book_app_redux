@@ -7,3 +7,4 @@ jest.mock('react-native-share', () => ({
 }));
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
 jest.mock('react-native-blob-util', () => ({default: jest.fn()}));
+jest.useFakeTimers();
