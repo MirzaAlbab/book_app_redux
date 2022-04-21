@@ -1,13 +1,13 @@
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {s, vs, ms, mvs} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import Monserrat from '../../components/Monserrat';
 import logo from '../../assets/images/logo.png';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,7 +15,6 @@ import Loading from '../../components/Loading';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLogin} from './redux/action';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
 export default function Login({navigation}) {
   const [emailerror, setEmailerror] = useState(false);
   const [passworderror, setPassworderror] = useState(false);
@@ -28,7 +27,7 @@ export default function Login({navigation}) {
 
   const handleChange = (key, value) => {
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const regEmail = /^\w+(\[\+\.-\]?\w)*@\w+(\[\.-\]?\w+)*\.[a-z]+$/i;
     if (key === 'email') {
       if (regEmail.test(value)) {
         setDataLogin({...dataLogin, [key]: value});
@@ -50,14 +49,15 @@ export default function Login({navigation}) {
 
   useEffect(() => {
     if (token) {
-      navigation.navigate('Home');
+      navigation.navigate('Media');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const postLogin = async () => {
     // Cek inputan kosong
     if (!dataLogin.email || !dataLogin.password) {
-      alert('Email atau password tidak boleh kosong');
+      Alert.alert('warning', 'Email atau password tidak boleh kosong');
     } else {
       dispatch(setLogin(dataLogin));
     }

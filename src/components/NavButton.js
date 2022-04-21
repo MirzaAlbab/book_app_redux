@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import React from 'react';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {notifikasi} from './Notifikasi';
-import {v, vs, ms, mvs} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import Share from 'react-native-share';
 
 export default function NavButton({navigation, judul}) {
@@ -34,6 +34,15 @@ export default function NavButton({navigation, judul}) {
     };
     try {
       const result = await Share.open(shareOptions);
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
     } catch (error) {
       console.log(error);
     }

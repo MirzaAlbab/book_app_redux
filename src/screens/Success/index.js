@@ -1,4 +1,4 @@
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import React from 'react';
 import success from '../../assets/images/success.png';
 import Monserrat from '../../components/Monserrat';

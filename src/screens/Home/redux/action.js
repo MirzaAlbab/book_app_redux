@@ -13,7 +13,6 @@ export const getAllBook = () => async dispatch => {
     const results = await axios.get(`${BaseUrlApi}books`, {
       validateStatus: status => status < 501,
     });
-    console.log(results.status);
 
     if (results.status <= 201) {
       dispatch(setBookPopular(results.data.results));

@@ -1,16 +1,14 @@
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
-  ActivityIndicator,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
-import {scale, verticalScale, moderateScale} from 'react-native-size-matters';
-import axios from 'axios';
-import {BaseUrlApi} from '../../helpers/api';
+import {moderateScale} from 'react-native-size-matters';
+
 import Monserrat from '../../components/Monserrat';
 import logo from '../../assets/images/logo.png';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -31,14 +29,15 @@ export default function Register({navigation}) {
     // Cek inputan kosong
     console.log(dataRegister);
     if (!dataRegister.email || !dataRegister.password || !dataRegister.name) {
-      alert('Email atau password atau name tidak boleh kosong');
+      Alert.alert('Email atau password atau name tidak boleh kosong');
     } else {
       dispatch(setRegister(dataRegister));
     }
   };
   const handleChange = (key, value) => {
     const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    const regEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const regEmail =
+      /^(([^<>()[]\.,;:\s@"]+(.[^<>()[]\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
     if (key === 'email') {
       if (regEmail.test(value)) {
         setDataRegister({...dataRegister, [key]: value});

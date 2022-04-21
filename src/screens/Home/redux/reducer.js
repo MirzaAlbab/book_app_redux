@@ -4,7 +4,7 @@ const initialState = {
   detailBook: {},
 };
 
-export default HomeReducer = (state = initialState, action) => {
+const HomeReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_BOOK_POPULAR':
       return {
@@ -27,3 +27,5 @@ export default HomeReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+export default HomeReducer;

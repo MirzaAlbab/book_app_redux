@@ -10,20 +10,19 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Header from './Header';
 import {setRefresh, setConnection} from '../../reducer/globalAction';
 import {getAllBook, getDetailBook} from './redux/action';
-import {s, vs, ms, mvs} from 'react-native-size-matters';
+import {ms} from 'react-native-size-matters';
 import Monserrat from '../../components/Monserrat';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Rupiah} from '../../helpers/Rupiah';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../../components/Loading';
-
+import NetInfo from '@react-native-community/netinfo';
 import {sortBook} from '../../helpers/Sortbook';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -39,6 +38,7 @@ export default function Home({navigation}) {
     getListBook();
     exit();
     setrecommended(sortBook(recommendedBook, 6));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getListBook = () => {
@@ -60,8 +60,6 @@ export default function Home({navigation}) {
 
   const internetChecker = () => {
     NetInfo.fetch().then(state => {
-      console.log('Connection type', state.type);
-      console.log('Is connected?', state.isConnected);
       dispatch(setConnection(state.isConnected));
     });
   };
@@ -167,6 +165,7 @@ export default function Home({navigation}) {
       <View style={styles.container}>
         <Header name={user.user.name} />
         {loading ? <Loading /> : null}
+
         <FlatList
           style={{marginTop: 20}}
           refreshControl={
@@ -236,7 +235,6 @@ export default function Home({navigation}) {
             </>
           )}
         />
-
         {connection ? null : (
           <NoInternetModal
             show={!connection}
@@ -292,5 +290,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 20,
+  },
+  pdf: {
+    flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });

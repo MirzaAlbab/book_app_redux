@@ -1,0 +1,26 @@
+name: deploy to telegram
+
+on:
+  workflow_dispatch: # allow manual run of job
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  testing:
+    #the type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    #steps represent a sequence of task that will be executed as part of the job
+    steps:
+      # checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: action/checkout@v2
+      #node android java
+      - uses: docker://circleci/android:api-29-node
+
+      - name: instalasi modules
+        run: yarn
+
+      - name: unit testing
+        run: yarn test

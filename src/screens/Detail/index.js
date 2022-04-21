@@ -1,25 +1,21 @@
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   ImageBackground,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
-import {v, vs, m, ms} from 'react-native-size-matters';
 import NavButton from '../../components/NavButton';
-import Loader from '../../components/Loading';
 import {Rupiah} from '../../helpers/Rupiah';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Loading from '../../components/Loading';
 import Monserrat from '../../components/Monserrat';
 
 export default function Detail({navigation, route}) {
   const {detailBook} = useSelector(state => state.home);
-  const {loading} = useSelector(state => state.global);
 
   return (
     <View style={styles.container}>
@@ -199,7 +195,7 @@ export default function Detail({navigation, route}) {
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          onPress={() => alert('Book is not available')}>
+          onPress={() => Alert.alert('warning', 'Book is not available')}>
           <Monserrat color="white" type="Bold" size={16}>
             Buy
           </Monserrat>

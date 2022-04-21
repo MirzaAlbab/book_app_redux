@@ -2,7 +2,7 @@ import axios from 'axios';
 import {BaseUrlApi} from '../../../helpers/api';
 import {navigate} from '../../../helpers/Navigasi';
 import {setLoading} from '../../../reducer/globalAction';
-
+import {Alert} from 'react-native';
 export const setLogin = payload => async dispatch => {
   try {
     dispatch(setLoading(true));
@@ -17,9 +17,9 @@ export const setLogin = payload => async dispatch => {
     if (res.status <= 201) {
       dispatch(setUser(res.data));
       dispatch(setToken(res.data.tokens.access.token));
-      navigate('Home');
+      navigate('Media');
     } else {
-      return alert('Email atau Password salah');
+      return Alert.alert('warning', 'Email atau Password salah');
     }
   } catch (error) {
     console.log(error);
@@ -62,7 +62,7 @@ export const setRegister = payload => async dispatch => {
     if (res.status <= 201) {
       navigate('Success');
     } else {
-      return alert('Registrasi gagal');
+      return Alert.alert('Registrasi gagal');
     }
   } catch (error) {
     console.log(error);
