@@ -23,7 +23,6 @@ import {Rupiah} from '../../helpers/Rupiah';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Loading from '../../components/Loading';
 import NetInfo from '@react-native-community/netinfo';
-import Sound from 'react-native-sound';
 import {sortBook} from '../../helpers/Sortbook';
 import Modal from 'react-native-modal';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

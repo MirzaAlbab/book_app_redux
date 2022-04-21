@@ -1,5 +1,5 @@
-import {StyleSheet, Text, Button, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
 import VideoPlayer from 'react-native-video-player';
 import Monserrat from '../../../components/Monserrat';
 import {ms} from 'react-native-size-matters';
@@ -7,7 +7,6 @@ import Foundation from 'react-native-vector-icons/Foundation';
 
 export default function Video({navigation}) {
   const [index, setIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const videos = [
     {

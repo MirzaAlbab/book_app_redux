@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import React from 'react';
 import Audio from './components/Audio';
 import Monserrat from '../../components/Monserrat';
