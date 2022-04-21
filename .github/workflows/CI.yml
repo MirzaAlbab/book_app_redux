@@ -1,7 +1,7 @@
-name: CI Process
+name: CI Proccess
 
 on:
-  workflow_dispatch: # allow manual run of job
+  workflow_dispatch: # allow jobs manual run
   push:
     branches: [main]
   pull_request:
@@ -9,18 +9,28 @@ on:
 
 jobs:
   testing:
-    #the type of runner that the job will run on
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    #steps represent a sequence of task that will be executed as part of the job
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # checks out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: action/checkout@v2
-      #node android java
-      - uses: docker://circleci/android:api-29-node
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
       - name: instalasi modules
         run: yarn
 
       - name: unit testing
         run: yarn test
+
+  check-linter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: instalasi modules
+        run: yarn
+
+      - name: cleaning codes
+        run: yarn lint
