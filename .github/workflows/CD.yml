@@ -1,4 +1,4 @@
-name: CD
+name: Deploy to telegram
 
 on:
   workflow_dispatch: # allow jobs manual run
@@ -17,16 +17,26 @@ jobs:
         run: yarn
 
       - name: make gradle executable
-        run: chmod +x ./android/gradle
+        run: chmod +x ./android/gradlew
 
       - name: generate apk
         run: |
           cd android
-          ./gradlew bundleRelease
+          ./gradlew assembleRelease bundleRelease
           cd ..
 
-      # -name: send apk to tele
-      #   run: |
-      # curl -F "file=@android/app/build/outputs/apk/release/app-release.apk" -F "token=${TELE_TOKEN}" https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendDocument
+      - name: send to telegram
+        run: |
+          cd android/app/build/outputs/apk/release/
+          curl -X POST -H 'Content-Type: multipart/form-data' -F chat_id=${{secrets.TG_CHAT_ID}} -F text='App is Released!' https://api.telegram.org/bot$%7B%7Bsecrets.TG_BOT_TOKEN%7D%7D/sendMessage
+          curl -X POST -H 'Content-Type: multipart/form-data' -F chat_id=${{secrets.TG_CHAT_ID}} -F document=@app-release.apk https://api.telegram.org/bot$%7B%7Bsecrets.TG_BOT_TOKEN%7D%7D/sendDocument
 
-      # curl -X POST -H 'Content-Type: multipart/form-data' -F "chat_id=${{secrets.TG_CHAT_ID}}" -F document=@app-release.apk ${{secrets.TG_BOT_TOKEN}}/sendDocument
+      # - name: Upload App to Google Play
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON }}
+      #     packageName: com.bookapp.iqbal
+      #     releaseFiles: android/app/build/outputs/bundle/release/*.aab
+      #     track: alpha
+      #     status: completed
+      #     inAppUpdatePriority: 2
