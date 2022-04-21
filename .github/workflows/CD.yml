@@ -22,7 +22,7 @@ jobs:
       - name: generate apk
         run: |
           cd android
-          ./gradlew assembleRelease bundleRelease
+          ./gradlew assembleRelease 
           cd ..
 
       - name: send to telegram
