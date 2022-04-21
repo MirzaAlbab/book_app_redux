@@ -1,33 +1,32 @@
-name: Deploy to tele
+name: Deploy to telegram
 
 on:
-  workflow_dispatch: # allow manual run of job
+  workflow_dispatch: # allow jobs manual run
   release:
     types: [published]
 
-
 jobs:
-  send-tele:
-    name: send file tele
+  send-to-telegram:
+    name: send file to telegram
     runs-on: ubuntu-latest
 
     steps:
-      -uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      -name: instalasi modules
+      - name: instalasi modules
         run: yarn
-      
-      -name: make gradle executable
+
+      - name: make gradle executable
         run: chmod +x ./android/gradle
-      
-      -name: generate apk
+
+      - name: generate apk
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew bundleRelease
           cd ..
-      
-      -name: send apk to tele
-        run: |
-          # curl -F "file=@android/app/build/outputs/apk/release/app-release.apk" -F "token=${TELE_TOKEN}" https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendDocument
-          
-          # curl -X POST -H 'Content-Type: multipart/form-data' -F "chat_id=${{secrets.TG_CHAT_ID}}" -F document=@app-release.apk ${{secrets.TG_BOT_TOKEN}}/sendDocument
+
+      # -name: send apk to tele
+      #   run: |
+      # curl -F "file=@android/app/build/outputs/apk/release/app-release.apk" -F "token=${TELE_TOKEN}" https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendDocument
+
+      # curl -X POST -H 'Content-Type: multipart/form-data' -F "chat_id=${{secrets.TG_CHAT_ID}}" -F document=@app-release.apk ${{secrets.TG_BOT_TOKEN}}/sendDocument
