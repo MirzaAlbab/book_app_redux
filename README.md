@@ -59,4 +59,4 @@ This repository uses React Native 0.67.3 and older native dependencies. Current 
 
 ## License
 
-No root `LICENSE` file was present in the reviewed repository. Consult the repository owner about reuse; dependencies and third-party assets retain their own terms.
+Original project code is available under the [MIT License](LICENSE). Third-party libraries, templates, datasets, and assets retain their own terms and attribution.
