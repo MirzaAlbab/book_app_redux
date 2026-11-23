@@ -9,7 +9,7 @@ A React Native book application with Redux state management, account screens, an
 - Home and book-detail screens
 - Login and registration screens
 - PDF, audio, and video components
-- Redux persistence and screen/component snapshot tests
+- Redux persistence, action tests, and component snapshot tests
 
 ## Technology
 
@@ -25,7 +25,7 @@ cd book_app_redux
 ```
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 npm start
 ```
 
@@ -53,7 +53,9 @@ npm run lint
 
 ## Project notes
 
-Configure backend endpoints used by the screen actions before testing account and catalog flows. The repository uses React Native 0.67.3 and older native dependencies.
+The catalog and account screens use the API URL in `src/helpers/api.js`. That URL currently points to a third-party HTTP service, so account requests are sent without transport encryption. Configure an HTTPS backend you control before using real credentials or publishing the app. The API was unavailable from the review environment, so account and catalog integration could not be verified end to end.
+
+This repository uses React Native 0.67.3 and older native dependencies. Current npm needs `--legacy-peer-deps` because the video player packages declare conflicting peer versions. The automated checks run JavaScript tests and lint; native Android and iOS builds still need their respective toolchains.
 
 ## License
 

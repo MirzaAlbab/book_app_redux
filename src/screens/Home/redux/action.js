@@ -2,24 +2,26 @@ import axios from 'axios';
 import {BaseUrlApi} from '../../../helpers/api';
 import {navigate} from '../../../helpers/Navigasi';
 import {setLoading} from '../../../reducer/globalAction';
-import {store} from '../../../store';
-const token = store.getState().login.token;
 
-axios.defaults.headers.Authorization = `Bearer ${token}`;
+const authHeaders = getState => {
+  const token = getState().login.token;
+  return token ? {Authorization: `Bearer ${token}`} : {};
+};
 
-export const getAllBook = () => async dispatch => {
+export const getAllBook = () => async (dispatch, getState) => {
   try {
     dispatch(setLoading(true));
+    const token = getState().login.token;
     const results = await axios.get(`${BaseUrlApi}books`, {
-      validateStatus: status => status < 501,
+      headers: authHeaders(getState),
     });
 
-    if (results.status <= 201) {
+    if (results.status <= 201 && token === getState().login.token) {
       dispatch(setBookPopular(results.data.results));
       dispatch(setBookRecommended(results.data.results));
     }
   } catch (error) {
-    console.log(error);
+    // The catalog remains visible from the last successful request.
   } finally {
     dispatch(setLoading(false));
   }
@@ -38,18 +40,19 @@ export const setBookRecommended = payload => {
 };
 
 // Detail Book
-export const getDetailBook = id => async dispatch => {
+export const getDetailBook = id => async (dispatch, getState) => {
   try {
     dispatch(setLoading(true));
+    const token = getState().login.token;
     const results = await axios.get(`${BaseUrlApi}books/${id}`, {
-      validateStatus: status => status < 501,
+      headers: authHeaders(getState),
     });
-    if (results.status <= 201) {
+    if (results.status <= 201 && token === getState().login.token) {
       dispatch(setdetailBook(results.data));
       navigate('Detail');
     }
   } catch (error) {
-    console.log(error);
+    // Keep the current screen when a detail request fails.
   } finally {
     dispatch(setLoading(false));
   }

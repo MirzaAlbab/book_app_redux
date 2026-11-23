@@ -6,6 +6,8 @@ const initialState = {
 
 const HomeReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'CLEAR_BOOKS':
+      return initialState;
     case 'SET_BOOK_POPULAR':
       return {
         ...state,

@@ -1,36 +1,22 @@
-name: CI Proccess
+name: JavaScript checks
 
 on:
-  workflow_dispatch: # allow jobs manual run
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
-  testing:
-    # The type of runner that the job will run on
+  checks:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: instalasi modules
-        run: yarn
-
-      # - name: unit testing
-      #   run: yarn test
-
-  check-linter:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: instalasi modules
-        run: yarn
-
-      - name: cleaning codes
-        run: yarn lint
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --no-package-lock
+      - name: Test
+        run: npm test -- --runInBand --watch=false --silent
+      - name: Lint
+        run: npm run lint -- --quiet

@@ -22,7 +22,7 @@ export const setLogin = payload => async dispatch => {
       return Alert.alert('warning', 'Email atau Password salah');
     }
   } catch (error) {
-    console.log(error);
+    Alert.alert('Login gagal', 'Periksa koneksi dan coba lagi');
   } finally {
     dispatch(setLoading(false));
   }
@@ -42,7 +42,9 @@ export const setToken = payload => {
 };
 
 export const setLogoutAction = () => dispatch => {
-  dispatch(setToken());
+  dispatch(setToken(''));
+  dispatch(setUser({}));
+  dispatch({type: 'CLEAR_BOOKS'});
   navigate('Login');
 };
 
@@ -65,7 +67,7 @@ export const setRegister = payload => async dispatch => {
       return Alert.alert('Registrasi gagal');
     }
   } catch (error) {
-    console.log(error);
+    Alert.alert('Registrasi gagal', 'Silakan coba lagi');
   } finally {
     dispatch(setLoading(false));
   }
