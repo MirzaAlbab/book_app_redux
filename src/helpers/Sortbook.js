@@ -1,5 +1,5 @@
-export const sortBook = (books, n) => {
-  const sorted = books
+export const sortBook = (books = [], n) => {
+  const sorted = [...books]
     .sort((a, b) => {
       return b.average_rating - a.average_rating;
     })

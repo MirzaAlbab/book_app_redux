@@ -10,7 +10,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Header from './Header';
 import {setRefresh, setConnection} from '../../reducer/globalAction';
@@ -30,20 +30,20 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export default function Home({navigation}) {
   const {loading, refreshing, connection} = useSelector(state => state.global);
   const {popularBook, recommendedBook} = useSelector(state => state.home);
-  const [recommended, setrecommended] = useState(recommendedBook);
+  const recommended = sortBook(recommendedBook, 6);
   const {user} = useSelector(state => state.login);
 
   const dispatch = useDispatch();
   useEffect(() => {
     getListBook();
-    exit();
-    setrecommended(sortBook(recommendedBook, 6));
+    const removeBackHandler = exit();
+    return removeBackHandler;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getListBook = () => {
     internetChecker();
-    dispatch(getAllBook());
+    return dispatch(getAllBook());
   };
 
   const getBookDetails = id => {
@@ -51,11 +51,13 @@ export default function Home({navigation}) {
     dispatch(getDetailBook(id));
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     dispatch(setRefresh(true));
-    getListBook();
-    setrecommended(sortBook(recommendedBook, 6));
-    dispatch(setRefresh(false));
+    try {
+      await getListBook();
+    } finally {
+      dispatch(setRefresh(false));
+    }
   };
 
   const internetChecker = () => {
@@ -163,7 +165,7 @@ export default function Home({navigation}) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <Header name={user.user.name} />
+        <Header name={user?.user?.name || user?.name || 'Reader'} />
         {loading ? <Loading /> : null}
 
         <FlatList

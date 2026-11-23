@@ -27,7 +27,6 @@ export default function Register({navigation}) {
 
   const postRegister = async () => {
     // Cek inputan kosong
-    console.log(dataRegister);
     if (!dataRegister.email || !dataRegister.password || !dataRegister.name) {
       Alert.alert('Email atau password atau name tidak boleh kosong');
     } else {
